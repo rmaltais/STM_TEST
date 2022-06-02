@@ -39,7 +39,7 @@ int delayval = 170; // delay for half a second
 #include <DallasTemperature.h>
 #include <Fonts/FreeMono9pt7b.h>
 #include <Fonts/FreeSansBoldOblique9pt7b.h>
-#include <LiquidCrystal_I2C.h>
+
 
 #define SCREEN_WIDTH 128 // OLED display width,  in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -49,7 +49,7 @@ int delayval = 170; // delay for half a second
 Adafruit_SSD1306 oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1); // create SSD1306 display object connected to I2C
 OneWire oneWire(SENSOR_PIN);                                   // setup a oneWire instance
 DallasTemperature tempSensor(&oneWire);                        // pass oneWire to DallasTemperature library
-LiquidCrystal_I2C lcd(PCF8574_ADDR_A21_A11_A01, 4, 5, 6, 16, 11, 12, 13, 14, POSITIVE);
+
 
 String tempString;
 void oledDisplayCenter(String text);
@@ -65,17 +65,8 @@ void setup()
     Serial.begin(115200);
     pixels.begin(); // This initializes the NeoPixel library.
 
-  while (lcd.begin(16, 2) != 1) //colums - 20, rows - 4
-  {
-    Serial.println(F("PCF8574 is not connected or lcd pins declaration is wrong. Only pins numbers: 4,5,6,16,11,12,13,14 are legal."));
-    delay(5000);   
-  }
-    //   Serial.begin(9600);
-    lcd.print(F("PCF8574 is OK...")); //(F()) saves string to flash & keeps dynamic memory free
-    delay(2000);
-
-    lcd.clear();
-
+  
+   
     // initialize OLED display with address 0x3C for 128x64
     if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C))
     {
@@ -100,12 +91,7 @@ void loop()
 {
     tempSensor.requestTemperatures();                  // send the command to get temperatures
     float tempCelsius = tempSensor.getTempCByIndex(0); // read temperature in Celsius
-    lcd.clear();
-    lcd.print(F("Temperate:"));
-    lcd.setCursor(11,0);
-    lcd.print((float)tempSensor.getTempCByIndex(0));
-    delay(2000);
-    // lcd.clear();
+    
     
     tempString = "T: ";
     tempString += String(tempCelsius, 2); // two decimal places
